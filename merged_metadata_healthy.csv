@@ -1,0 +1,6 @@
+﻿sample_id,disease,sex,age
+FTLD_R1,ftld,female,74
+FTLD_R2,ftld,male,51
+FTLD_R3,ftld,male,48
+Healthy_R1,healthy,male,25
+Healthy_R2,healthy,female,20

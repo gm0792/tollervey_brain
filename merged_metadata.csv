@@ -1,0 +1,5 @@
+﻿sample_id,disease,sex
+FTLD_R1,ftld,female
+FTLD_R2,ftld,male
+Healthy_R1,healthy,male
+Healthy_R2,healthy,female
