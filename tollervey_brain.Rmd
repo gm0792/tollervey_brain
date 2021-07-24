@@ -2,7 +2,7 @@
 title: "TDP-43 binding in healthy and FTLD human brain"
 output: html_notebook
 author: Giulia Manferrari
-date: 24.04.21
+date: 15.07.21
 ---
 
 # CLIP META-ANALYISIS
@@ -41,7 +41,7 @@ library(cowplot)
 
 ### Working directory 
 ```{r}
-setwd("/Users/manferg/clip_metanalysis/")
+setwd("/Users/manferg/clip_metanalysis/tollervey_brain/")
 ```
 
 ### Functions
@@ -205,49 +205,49 @@ ggsave(library.size.plot, filename = "/Users/manferg/clip_metanalysis/r-plots/to
 ```{r}
 #BED INTERSECTED FILES------------------------------------
 #Tollervey - import intersected files genialis----------------------
-tollervey.fi.li = list.files(path = "/Volumes/lab-luscomben/home/users/manferg/projects/nf/clip/tollervey/data/run/results/xlinks/intersected-genialis", pattern = ".xl.bed$", full.names = TRUE) #store file paths for each file in a list
-tollervey.fi.li.names = list.files(path = "/Volumes/lab-luscomben/home/users/manferg/projects/nf/clip/tollervey/data/run/results/xlinks/intersected-genialis", pattern = "xl.bed$", full.names = FALSE) %>%
-  gsub(".xl.bed","",.) %>%
-  gsub("intersect_","",.)#extracts files names in a seprate list
-
-tollervey.intersect.bed.li = list() #create empty list
-for (i in 1:length(tollervey.fi.li)){
-  temp = read.table(tollervey.fi.li[[i]])
-  tollervey.intersect.bed.li[[i]] = temp
-  tollervey.intersect.bed.li[[i]]<-dplyr::select(tollervey.intersect.bed.li[[i]], -V6,-V8,-V10,-V12) #remove variable columns
-  colnames(tollervey.intersect.bed.li[[i]]) = c("seqname","start","end","score","region","gene_id","gene_name","biotype") #rename columns
-  tollervey.intersect.bed.li[[i]]$gene_id <- sub(".", "NA", tollervey.intersect.bed.li[[i]]$gene_id)
-  tollervey.intersect.bed.li[[i]]$gene_id <- sub("NANSG","ENSG", tollervey.intersect.bed.li[[i]]$gene_id)
-    # Add `sample` column to the data frame
-  }
-names(tollervey.intersect.bed.li) <-tollervey.fi.li.names #adding sample names to list elements
-
-
-for (i in 1:length(tollervey.intersect.bed.li)){
-tollervey.intersect.bed.li[[i]]<- as.data.frame(tollervey.intersect.bed.li[[i]])
-sample<-as.character(names(tollervey.intersect.bed.li[i])) # Create a new vector with sample names
-tollervey.intersect.bed.li[[i]]$sample <- sample
-}
-
-#main df on BED intersected for Tollervey et al + Grot et al ---------------------------
-
-#main df on BED intersected for Tollervey--------------------
-tollervey.intresected.df<-do.call(rbind, tollervey.intersect.bed.li)
-tollervey.intresected.df.chromosomes<-tollervey.intresected.df[grep("chr", tollervey.intresected.df$seqname),] #select only chromosomes / discard scaffolds
-
-
-
-intresected.df<-tollervey.intresected.df
-
-write.csv(intresected.df,file="/Users/manferg/clip_metanalysis/tollervey_brain/intresected.df.csv")
-
-intresected.chr.df<-tollervey.intresected.df.chromosomes
-
-
-
- write.csv(intresected.chr.df,file="/Users/manferg/clip_metanalysis/tollervey_brain/intresected.chr.df.csv")
-
-dim(intresected.chr.df) #4465898
+# tollervey.fi.li = list.files(path = "/Volumes/lab-luscomben/home/users/manferg/projects/nf/clip/tollervey/data/run/results/xlinks/intersected-genialis", pattern = ".xl.bed$", full.names = TRUE) #store file paths for each file in a list
+# tollervey.fi.li.names = list.files(path = "/Volumes/lab-luscomben/home/users/manferg/projects/nf/clip/tollervey/data/run/results/xlinks/intersected-genialis", pattern = "xl.bed$", full.names = FALSE) %>%
+#   gsub(".xl.bed","",.) %>%
+#   gsub("intersect_","",.)#extracts files names in a seprate list
+# 
+# tollervey.intersect.bed.li = list() #create empty list
+# for (i in 1:length(tollervey.fi.li)){
+#   temp = read.table(tollervey.fi.li[[i]])
+#   tollervey.intersect.bed.li[[i]] = temp
+#   tollervey.intersect.bed.li[[i]]<-dplyr::select(tollervey.intersect.bed.li[[i]], -V6,-V8,-V10,-V12) #remove variable columns
+#   colnames(tollervey.intersect.bed.li[[i]]) = c("seqname","start","end","score","region","gene_id","gene_name","biotype") #rename columns
+#   tollervey.intersect.bed.li[[i]]$gene_id <- sub(".", "NA", tollervey.intersect.bed.li[[i]]$gene_id)
+#   tollervey.intersect.bed.li[[i]]$gene_id <- sub("NANSG","ENSG", tollervey.intersect.bed.li[[i]]$gene_id)
+#     # Add `sample` column to the data frame
+#   }
+# names(tollervey.intersect.bed.li) <-tollervey.fi.li.names #adding sample names to list elements
+# 
+# 
+# for (i in 1:length(tollervey.intersect.bed.li)){
+# tollervey.intersect.bed.li[[i]]<- as.data.frame(tollervey.intersect.bed.li[[i]])
+# sample<-as.character(names(tollervey.intersect.bed.li[i])) # Create a new vector with sample names
+# tollervey.intersect.bed.li[[i]]$sample <- sample
+# }
+# 
+# #main df on BED intersected for Tollervey et al + Grot et al ---------------------------
+# 
+# #main df on BED intersected for Tollervey--------------------
+# tollervey.intresected.df<-do.call(rbind, tollervey.intersect.bed.li)
+# tollervey.intresected.df.chromosomes<-tollervey.intresected.df[grep("chr", tollervey.intresected.df$seqname),] #select only chromosomes / discard scaffolds
+# 
+# 
+# 
+# intresected.df<-tollervey.intresected.df
+# 
+# write.csv(intresected.df,file="/Users/manferg/clip_metanalysis/tollervey_brain/intresected.df.csv")
+# 
+# intresected.chr.df<-tollervey.intresected.df.chromosomes
+# 
+# 
+# 
+#  write.csv(intresected.chr.df,file="/Users/manferg/clip_metanalysis/tollervey_brain/intresected.chr.df.csv")
+# 
+# dim(intresected.chr.df) #4465898
 
 
 ```
@@ -278,7 +278,7 @@ metadata<- read_csv("/Users/manferg/clip_metanalysis/meta_metadata.csv") %>% as.
 rownames(metadata)
 colnames(metadata)
 
-metadata<- metadata[reorder_sample_idx ,]
+# metadata<- metadata[reorder_sample_idx ,]
 metadata$meta_id <- rownames(metadata)
 metadata<- metadata %>% mutate(meta_id = gsub("tollervey_SHSY5Y1a", "tollervey_SHSY5Y1a.high",meta_id), meta_id = gsub("tollervey_SHSY5Y1b", "tollervey_SHSY5Y1b.low", meta_id))
 metadata$meta_id -> rownames(metadata)
@@ -317,8 +317,8 @@ Split each samples dataset as an element of a list
 main.chr.li = split(intresected.chr.df.fil,intresected.chr.df.fil$sample) #transform df into list 
 
 
-main.chr.li<-main.chr.li[reorder_sample_idx] #reorder list elements 
-names(main.chr.li) #check order
+# main.chr.li<-main.chr.li[reorder_sample_idx] #reorder list elements 
+# names(main.chr.li) #check order
 
 ```
 
@@ -397,23 +397,25 @@ score.xlink.df[score.xlink.df$gene_name =="MALAT1",]
 score.xlink.df[score.xlink.df$gene_name =="SNORA54",]
 score.xlink.df[score.xlink.df$gene_name =="AL356488.2",]
 score.xlink.df[score.xlink.df$gene_name =="TAF1D",]
+score.xlink.df[score.xlink.df$gene_name =="RBFOX1",]
 ```
 
 #FILTERING OUT LOW CROSS-LINKS 
 
 ```{r}
 
-score.xlink.df.filt<-score.xlink.df %>% filter(score > 5) %>% filter(n > 5)
+# score.xlink.df.filt<-score.xlink.df %>% filter(score > 5) %>% filter(n > 5)
+score.xlink.df.filt<-score.xlink.df %>% filter(score > 1) %>% filter(n > 1)
 score.xlink.df.filt$n<-as.double(score.xlink.df.filt$n)
 
-score.xlink.df.filt<- score.xlink.df.filt[score.xlink.df.filt$n !=score.xlink.df.filt$score, ]
+#score.xlink.df.filt<- score.xlink.df.filt[score.xlink.df.filt$n !=score.xlink.df.filt$score, ]
 
 
 score.xlink.df.filt<-arrange(score.xlink.df.filt, score.xlink.df.filt$score)
 
 
 dim(score.xlink.df) #72170 
-dim(score.xlink.df.filt) #4054
+dim(score.xlink.df.filt) #44175
 
 ```
 
@@ -454,7 +456,7 @@ dens_plot_score<-ggplot(score.xlink.df,aes(x=log2(score))) +
   facet_wrap(~sample,scale="fixed") +
   xlab("Log2 score") +
   ylab("Frequency") +
-  ggtitle("Cross-links frequency")+
+  ggtitle("Score frequency")+
   theme_bw()
 dens_plot_score
 
@@ -463,7 +465,7 @@ dens_plot_score_fil<-ggplot(score.xlink.df.filt,aes(x=log2(score))) +
   facet_wrap(~sample,scale="fixed") +
   xlab("Log2 score") +
   ylab("Frequency") +
-  ggtitle("Cross-links frequency")+
+  ggtitle("Score frequency")+
   theme_bw()
 dens_plot_score_fil
 
@@ -494,34 +496,34 @@ scatter
 # MERGING, removing REPLICATES, removing intergenic scores 
 Merge by score sum! 
 ```{r}
-score.xlink.df.merged<-score.xlink.df[score.xlink.df$gene_name != "None",]
-unique(score.xlink.df$sample)
-score.xlink.df.merged$sample<-gsub("tollervey_brain7.low",'tollervey_brain6.high',score.xlink.df.merged$sample)
-score.xlink.merged.df<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged) %>% arrange( .,desc(score)) #merging ftld samples 
-
-score.xlink.df.merged$sample<-gsub("tollervey_brain3",'tollervey_brain5',score.xlink.df.merged$sample)
-score.xlink.df.merged<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged) %>% arrange( .,desc(score)) #merging ftld samples 
-
-
-unique(score.xlink.df.merged$sample)
-
-#exclude tollervey brain 1 
-score.xlink.df.merged<-score.xlink.df.merged %>% filter(sample != "tollervey_brain1")
-
-#merging sanity check 
-# score.xlink.df[grepl("GSE1", score.xlink.df$gene_name),]
-# score.xlink.df[grepl("MEG3", score.xlink.df$gene_name),]
-# score.xlink.df[grepl("KCNIP4", score.xlink.df$gene_name),]
-# score.xlink.df.merged[grepl("GSE1", score.xlink.df.merged$gene_name),]
-# score.xlink.df.merged[grepl("MEG3", score.xlink.df.merged$gene_name),]
-# score.xlink.df.merged[grepl("KCNIP4", score.xlink.df.merged$gene_name),]
-
-
-#rename samples
-score.xlink.df.merged<-score.xlink.df.merged %>% mutate(sample = gsub("tollervey_brain2","Healthy_R1",sample), sample = gsub("tollervey_brain6.high","Healthy_R2",sample),sample = gsub("tollervey_brain4","FTLD_R1",sample), sample = gsub("tollervey_brain5","FTLD_R2",sample))
-
-#reorder samples 
-reorder_merged_sample_idx <- c("Healthy_R1","Healthy_R2","FTLD_R1","FTLD_R2")
+# score.xlink.df.merged<-score.xlink.df[score.xlink.df$gene_name != "None",]
+# unique(score.xlink.df$sample)
+# score.xlink.df.merged$sample<-gsub("tollervey_brain7.low",'tollervey_brain6.high',score.xlink.df.merged$sample)
+# score.xlink.merged.df<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged) %>% arrange( .,desc(score)) #merging ftld samples 
+# 
+# score.xlink.df.merged$sample<-gsub("tollervey_brain3",'tollervey_brain5',score.xlink.df.merged$sample)
+# score.xlink.df.merged<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged) %>% arrange( .,desc(score)) #merging ftld samples 
+# 
+# 
+# unique(score.xlink.df.merged$sample)
+# 
+# #exclude tollervey brain 1 
+# score.xlink.df.merged<-score.xlink.df.merged %>% filter(sample != "tollervey_brain1")
+# 
+# #merging sanity check 
+# # score.xlink.df[grepl("GSE1", score.xlink.df$gene_name),]
+# # score.xlink.df[grepl("MEG3", score.xlink.df$gene_name),]
+# # score.xlink.df[grepl("KCNIP4", score.xlink.df$gene_name),]
+# # score.xlink.df.merged[grepl("GSE1", score.xlink.df.merged$gene_name),]
+# # score.xlink.df.merged[grepl("MEG3", score.xlink.df.merged$gene_name),]
+# # score.xlink.df.merged[grepl("KCNIP4", score.xlink.df.merged$gene_name),]
+# 
+# score.xlink.df.merged[grepl("RBFOX1", score.xlink.df.merged$gene_name),]
+# #rename samples
+# score.xlink.df.merged<-score.xlink.df.merged %>% mutate(sample = gsub("tollervey_brain2","Healthy_R1",sample), sample = gsub("tollervey_brain6.high","Healthy_R2",sample),sample = gsub("tollervey_brain4","FTLD_R1",sample), sample = gsub("tollervey_brain5","FTLD_R2",sample))
+# 
+# #reorder samples 
+# reorder_merged_sample_idx <- c("Healthy_R1","Healthy_R2","FTLD_R1","FTLD_R2")
 
 
 ```
@@ -530,36 +532,36 @@ reorder_merged_sample_idx <- c("Healthy_R1","Healthy_R2","FTLD_R1","FTLD_R2")
 
 ```{r}
 
-score.xlink.df.merged.filt<-score.xlink.df.filt[score.xlink.df.filt$gene_name != "None",]
-unique(score.xlink.df$sample)
-score.xlink.df.merged.filt$sample<-gsub("tollervey_brain7.low",'tollervey_brain6.high',score.xlink.df.merged.filt$sample)
-score.xlink.merged.df<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged.filt) %>% arrange( .,desc(score)) #merging ftld samples 
-
-score.xlink.df.merged.filt$sample<-gsub("tollervey_brain3",'tollervey_brain5',score.xlink.df.merged.filt$sample)
-score.xlink.df.merged.filt<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged.filt) %>% arrange( .,desc(score)) #merging ftld samples 
-
-
-unique(score.xlink.df.merged.filt$sample)
-
-#exclude tollervey brain 1 
-score.xlink.df.merged.filt<-score.xlink.df.merged.filt %>% filter(sample != "tollervey_brain1")
-
-#merging sanity check 
-# score.xlink.df[grepl("GSE1", score.xlink.df$gene_name),]
-# score.xlink.df[grepl("MEG3", score.xlink.df$gene_name),]
+# score.xlink.df.merged.filt<-score.xlink.df.filt[score.xlink.df.filt$gene_name != "None",]
+# unique(score.xlink.df$sample)
+# score.xlink.df.merged.filt$sample<-gsub("tollervey_brain7.low",'tollervey_brain6.high',score.xlink.df.merged.filt$sample)
+# score.xlink.merged.df<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged.filt) %>% arrange( .,desc(score)) #merging ftld samples 
 # 
-# score.xlink.df.merged.filt[grepl("GSE1", score.xlink.df.merged.filt$gene_name),]
-# score.xlink.df.merged.filt[grepl("MEG3", score.xlink.df.merged.filt$gene_name),]
-# score.xlink.df.merged.filt[grepl("KCNIP4", score.xlink.df.merged.filt$gene_name),]
-#rename samples
-score.xlink.df.merged.filt<-score.xlink.df.merged.filt %>% mutate(sample = gsub("tollervey_brain2","Healthy_R1",sample), sample = gsub("tollervey_brain6.high","Healthy_R2",sample),sample = gsub("tollervey_brain4","FTLD_R1",sample), sample = gsub("tollervey_brain5","FTLD_R2",sample))
-
-#reorder samples 
-reorder_merged_sample_idx <- c("Healthy_R1","Healthy_R2","FTLD_R1","FTLD_R2")
-
-
-dim(score.xlink.df.merged) #53538
-dim(score.xlink.df.merged.filt) #3740
+# score.xlink.df.merged.filt$sample<-gsub("tollervey_brain3",'tollervey_brain5',score.xlink.df.merged.filt$sample)
+# score.xlink.df.merged.filt<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged.filt) %>% arrange( .,desc(score)) #merging ftld samples 
+# 
+# 
+# unique(score.xlink.df.merged.filt$sample)
+# 
+# #exclude tollervey brain 1 
+# score.xlink.df.merged.filt<-score.xlink.df.merged.filt %>% filter(sample != "tollervey_brain1")
+# 
+# #merging sanity check 
+# # score.xlink.df[grepl("GSE1", score.xlink.df$gene_name),]
+# # score.xlink.df[grepl("MEG3", score.xlink.df$gene_name),]
+# # 
+# # score.xlink.df.merged.filt[grepl("GSE1", score.xlink.df.merged.filt$gene_name),]
+# # score.xlink.df.merged.filt[grepl("MEG3", score.xlink.df.merged.filt$gene_name),]
+# # score.xlink.df.merged.filt[grepl("KCNIP4", score.xlink.df.merged.filt$gene_name),]
+# #rename samples
+# score.xlink.df.merged.filt<-score.xlink.df.merged.filt %>% mutate(sample = gsub("tollervey_brain2","Healthy_R1",sample), sample = gsub("tollervey_brain6.high","Healthy_R2",sample),sample = gsub("tollervey_brain4","FTLD_R1",sample), sample = gsub("tollervey_brain5","FTLD_R2",sample))
+# 
+# #reorder samples 
+# reorder_merged_sample_idx <- c("Healthy_R1","Healthy_R2","FTLD_R1","FTLD_R2")
+# 
+# 
+# dim(score.xlink.df.merged) #53538
+# dim(score.xlink.df.merged.filt) #3740
 
 ```
 
@@ -600,11 +602,11 @@ score.xlink.merged.healthy<-score.xlink.merged.healthy %>% mutate(sample = gsub(
 
 ```{r}
 
-score.xlink.df.merged.filt<-score.xlink.df.filt[score.xlink.df.filt$gene_name != "None",]
-score.xlink.df.merged.filt<-score.xlink.df.filt %>% dplyr::select(-n)
-unique(score.xlink.df$sample)
+score.xlink.df.merged.filt<-score.xlink.df.filt %>% filter(gene_name != "None") %>% arrange( .,desc(score))
+score.xlink.df.merged.filt<-score.xlink.df.merged.filt %>% dplyr::select(-n)
+
 #exclude tollervey brain 1 
-score.xlink.df.merged.filt<-score.xlink.df.merged.filt %>% filter(sample != "tollervey_brain1")
+score.xlink.df.merged.filt<-score.xlink.df.merged.filt %>% filter(sample != "tollervey_brain1") %>% arrange( .,desc(score))
 
 score.xlink.df.merged.filt$sample<-gsub("tollervey_brain7.low",'tollervey_brain6.high',score.xlink.df.merged.filt$sample)
 score.xlink.merged.healthy.filt<-aggregate(score ~ sample + gene_name,FUN = "sum", data=score.xlink.df.merged.filt) %>% arrange( .,desc(score)) #merging ftld samples 
@@ -622,39 +624,43 @@ score.xlink.merged.healthy.filt<-score.xlink.merged.healthy.filt %>% mutate(samp
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ```{r}
-dens_plot_score<-ggplot(score.xlink.df.merged,aes(x=log2(score))) +
+
+threshold.5= 2.32
+threshold.1.5=0.58
+
+dens_plot_score<-ggplot(score.xlink.merged.healthy,aes(x=log2(score))) +
   geom_density() +
   facet_wrap(~sample,scale="fixed") +
   xlab("Log2 score") +
+  scale_x_continuous(breaks = scales::pretty_breaks(n = 10))+
   ylab("Frequency") +
-  ggtitle("Score frequency")+
-  theme_bw()
+  geom_vline(xintercept = threshold.5, linetype = "dashed", color ="grey") +
+  geom_vline(xintercept = threshold.1.5, linetype = "dashed", color ="red") +
+  ggtitle("Score Frequency distribution") +
+  theme_bw()+
+  theme(plot.title = element_text(size=16))
+  
 dens_plot_score
+
 
 dens_plot_score_fil<-ggplot(score.xlink.merged.healthy.filt,aes(x=log2(score))) +
   geom_density() +
   facet_wrap(~sample,scale="fixed") +
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 10))+
+    geom_vline(xintercept = threshold.5, linetype = "dashed", color ="grey") +
+  geom_vline(xintercept = threshold.1.5, linetype = "dashed", color ="red") +
   xlab("Log2 score") +
   ylab("Frequency") +
-  ggtitle("Score frequency")+
-  theme_bw()
+  ggtitle("Score Frequency distribution - Post Filtering ")+
+  theme_bw()+
+theme(plot.title = element_text(size=16))
 dens_plot_score_fil
+
+
+
+
+
 ```
 
 
@@ -662,34 +668,76 @@ dens_plot_score_fil
 ```{r}
 #convert column to row names -format to be fed to DeSeq
 
+
 merged<-score.xlink.merged.healthy
+merged.filt<-score.xlink.merged.healthy.filt
+
 head(merged)
 
-cts<-spread(merged,sample,score)
-head(cts)
+cts.tot<-spread(merged,sample,score)
+cts.filt<-spread(merged.filt,sample,score) #12,738 rows | 
 
-cts["MT-RNR2",]
+# cts<-cts.filt%>% na.omit() #63.18 % of total genes passed the filtering post na.omit()
 
-dim(cts) #2557
 
-cts<- cts %>% na.omit()
-dim(cts) #78
+# not_NA_rows <- na.omit(cts.filt)#4,128 rows rows not containing NA values 
+# NA_rows <- cts.filt[rowSums(is.na(cts.filt)) > 0,]#8,610 rows containing NA values 
+# NA_rows_fil<-NA_rows[which(rowMeans(!is.na(NA_rows)) > 0.5),] %>% mutate_all(~replace(., is.na(.), 0)) #3,510 rows reatained 
 
-#adjust row names
-cts<-data.frame(cts, row.names = 1)
+#Filter out genes with NA values in more than 50% of rows - NA values conveted to 0 in retained genes 
+cts.filt<-cts.filt[which(rowMeans(!is.na(cts.filt)) > 0.5),] %>% mutate_all(~replace(., is.na(.), 0)) #7,638 rows
+# cts.filt[grepl("^RNVU1",cts.filt$gene_name),]
+
+cts.filt<-data.frame(cts.filt, row.names = 1) 
+
+cts<-cts.filt[rowSums(cts.filt) > 10,] #6,425 rows
+# cts.filt_low_score<-cts.filt[rowSums(cts.filt) < 10,] #6,425 rows
+
+
+
+nrow(cts.tot)
+nrow(cts.filt)
+(nrow(cts.filt) * 100)/nrow(cts.tot)  #37.3 % of total genespassed the filtering 
+
+
+dim(cts) #4151
+(nrow(cts) * 100)/nrow(cts.tot) #31.4 % of total genes passed the filtering 
+
+# p<-NA_rows[which(is.na(NA_rows$Healthy_R1) & is.na(NA_rows$Healthy_R2)),]
+# p<-NA_rows[which(is.na(NA_rows$FTLD_R1) & is.na(NA_rows$FTLD_R3)),]
+# p<-NA_rows[which(rowMeans(!is.na(NA_rows)) > 0.5), ] ## Remove rows with more than 50% NA 3,510 rows
+# p<-NA_rows[which(rowMeans(!is.na(NA_rows[2:4])) > 0.5), ] #1,978 rows
+# p<-NA_rows[which(rowMeans(!is.na(NA_rows[5:6])) > 0.5), ] #1,978 rows
+# p<-NA_rows[which(rowMeans(!is.na(NA_rows[2:4]) > 0.5) && rowMeans(!is.na(NA_rows[5:6]) > 0.5)),] #
+# p<-NA_rows[which(rowMeans(!is.na(NA_rows[5:6])) > 0.5), ] 
+# 
+# p<-p %>% mutate_all(~replace(., is.na(.), 0))
+# p<-p %>% filter(.,rowMeans(p[,1:3]) > rowMeans(p[,4:5])) %>% filter(.,rowSums(.,)>10)
+# p<-p %>% filter(.,rowMeans(p[,1:3]) < rowMeans(p[,4:5]))  %>% filter(.,rowSums(.,)>10)
 
 ```
+
+
+
+
+
+
+
+
 # IMPORT COLDATA/METADATA
 ```{r}
 
 coldata<-read.csv("/Users/manferg/clip_metanalysis/tollervey_brain/merged_metadata.csv")
 coldata<-read.csv("/Users/manferg/clip_metanalysis/tollervey_brain/merged_metadata_healthy.csv")
+
+
 #Format Coldata-----------------
-
+sample_order<-c("Healthy_R1","Healthy_R2","FTLD_R1","FTLD_R2","FTLD_R3")
+ 
 #assign coldata colnames as rownames 
-
 coldata<-data.frame(coldata, row.names = 1)
-
+coldata<-coldata[sample_order,]#reorder coldata according to sample order vector. Deseq2 default settings require to have controls as first level and variable of interest(disease/treatment) at the end
+cts<-cts[,sample_order]#reorder cts according to sample order vector. Deseq2 default settings require to have controls as first level and variable of interest(disease/treatment) at the end
 #check if all row names in coldata are present in cts
 rownames(coldata)
 colnames(cts)
@@ -697,17 +745,23 @@ dim(cts)
 all(rownames(coldata) %in% colnames(cts))
 #check if row names coldata should be column names in cts 
 all(rownames(coldata) == colnames(cts))
+
 ```
 
 
 #DESEQ PREFILTERED DATA construct of the DESeqDataSet (dds)-----------
+Note on factor levels
+By default, R will choose a reference level for factors based on alphabetical order. Then, if you never tell the DESeq2 functions which level you want to compare against (e.g. which level represents the control group), the comparisons will be based on the alphabetical order of the levels. There are two solutions: you can either explicitly tell results which comparison to make using the contrast argument (this will be shown later), or you can explicitly set the factors levels. You should only change the factor levels of variables in the design before running the DESeq2 analysis, not during or afterward. Setting the factor levels can be done in two ways, either using factor:
 ```{r}
 library("DESeq2")
 
 dds <- DESeqDataSetFromMatrix (countData = cts, 
                                colData = coldata, 
-                               design = ~ disease)
+                               design = ~ condition)
 dds
+
+dds$condition <- factor(dds$condition, levels = c("Healthy","FTLD"))
+
 ```
 
 
@@ -716,10 +770,13 @@ dds
 
 ```{r}
 dds <- DESeq(dds)
-res <- results(dds)
+resultsNames(dds)
+res<-results(dds,name="condition_FTLD_vs_Healthy")
 res
 head(res)
 dim(res)
+
+
 ```
 
 
@@ -752,7 +809,9 @@ summary(res)
 brain_res <- DESeq2::results(dds,tidy = TRUE)
 head(brain_res)
 dim(brain_res)
+
 ```
+
 
 
 #SUBSET SIGNIFICANT GENES-------------
@@ -761,10 +820,20 @@ dim(brain_res)
 #adjusted LFC and padj thresholds on tidy result table, filtered with dplyr 
 
 ```{r}
-res_default <- brain_res %>% filter(padj < 0.1) %>% filter(log2FoldChange >"0" | log2FoldChange <"0")
-res_signif <-  brain_res %>% filter(padj < 0.05) %>% filter(log2FoldChange >"1" | log2FoldChange <"1")
+res_default <- brain_res %>% filter(padj < 0.1) %>% filter(log2FoldChange >"0" | log2FoldChange <"0") #77 DEG
+res_signif <-  brain_res %>% filter(padj < 0.05) %>% filter(log2FoldChange > 0.5 | log2FoldChange < -0.5) #50
+res_signif <-  brain_res %>% filter(padj < 0.05) %>% filter(log2FoldChange > 1 | log2FoldChange < -1) #50
+# res_signif <-  brain_res %>% filter(padj < 0.01) %>% filter(log2FoldChange > 1 | log2FoldChange < -1) #19
+#res_signif <-  brain_res %>% filter(padj < 0.1) %>% filter(log2FoldChange >"1" | log2FoldChange <"1")
 
+dim(res_default)
 dim(res_signif)
+
+res_FC<-  brain_res  %>% filter(log2FoldChange > 2 | log2FoldChange < -2) #50
+arrange(res_FC,desc())
+
+brain_res[grepl("^RNVU1",brain_res$row),]
+
 ```
 
 
@@ -824,15 +893,33 @@ mn_resOrdered <- brain_res %>% arrange(padj) %>%
   dplyr::select(log2FoldChange, padj, pvalue, baseMean, lfcSE, row) %>% 
   distinct(row, .keep_all =TRUE)
 
-mn_resOrdered_signif <- mn_resOrdered %>% filter(padj < 0.05) %>% filter(log2FoldChange >"1" | log2FoldChange <"1")
+mn_resOrdered_signif <- mn_resOrdered %>% filter(padj < 0.05) %>% filter(log2FoldChange >1| log2FoldChange < -1)
 head(mn_resOrdered_signif)
 dim(mn_resOrdered_signif)
 
-mn_dge_list_up<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange > 1) %>% pull(row)
-head(mn_dge_list_up)
+mn_dge_list_up<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange >= 1) %>% arrange(.,padj) %>% pull(row)
+length(mn_dge_list_up)
 
-mn_dge_list_down<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange <= -1) %>% pull(row)
-head(mn_dge_list_down)
+mn_dge_list_down<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange <= -1) %>% arrange(.,padj) %>% pull(row)
+length(mn_dge_list_down)
+
+write.csv(mn_dge_list_up, file="ftld_brain_dge_list_up.csv")
+write.csv(mn_dge_list_down, file="ftld_brain_dge_list_down.csv")
+
+mn_data <- c(sum(mn_resOrdered$padj <= 0.05 & mn_resOrdered$log2FoldChange >= 1, na.rm=TRUE), sum(mn_resOrdered$padj <= 0.05 & mn_resOrdered$log2FoldChange <= -1, na.rm=TRUE))
+
+mn_DGE_summary  <- matrix(data = mn_data , nrow = 2, ncol = 1)
+mn_DGE_summary  <- as.data.frame((mn_DGE_summary))
+colnames(mn_DGE_summary) <- "de_genes"
+mn_DGE_summary$direction <- c("Up", "Down")
+mn_DGE_summary$sample <- c("FTLD brain") %>% factor(levels = c("FTLD brain"))
+
+mn_DGE_summary
+
+dge <- ggbarplot(mn_DGE_summary, x="sample" , y="de_genes", fill="direction", label = TRUE, lab.pos = "in", position = position_dodge(0.75), title = " TDP-43 iCLIP: Differentially Targeted Genes - FTLD vs Healthy Brain", 
+                 ylab = "No. DE Genes [FTLD:Healthy] (padj < 0.05 & FC > 1.0)") + xlab(NULL)+ theme(plot.title = element_text(size=10, face="bold", hjust = 0.5), axis.text=element_text(size=10), axis.title=element_text(size=10))
+
+dge
 
 ```
 
@@ -846,7 +933,7 @@ head(mn_dge_list_down)
 ```{r}
 print("VST transformation")
 mn_vsd <- vst(dds, blind=FALSE)
-mn_vsd <- vst(dds,nsub=nrow(dds))
+# mn_vsd <- vst(dds,nsub=nrow(dds)) vst transformation for when you have less than 1000 data points
 head(assay(mn_vsd))
 ```
 
@@ -882,10 +969,10 @@ library("hexbin")
 #PCA plot of vsd (transformed DEseq res data )
 ```{r}
 library(ggrepel)
-pcaData_vsd <- plotPCA(mn_vsd, intgroup=c("disease"), returnData=TRUE)
+pcaData_vsd <- plotPCA(mn_vsd, intgroup=c("condition"), returnData=TRUE)
 percentVar_vsd <- round(100 * attr(pcaData_vsd, "percentVar"))
-pca_vsd <- ggplot(pcaData_vsd, aes(PC1, PC2,color=disease)) + 
-  scale_colour_manual(values = get_palette("npg", 4)) + 
+pca_vsd <- ggplot(pcaData_vsd, aes(PC1, PC2,color=condition)) + 
+  scale_colour_manual(values = get_palette("lancet", 4)) + 
   geom_text_repel(aes(label=name), size = 4, show.legend = FALSE) +
   theme_bw() +  
   ggtitle("PCA plot") +  
@@ -923,20 +1010,34 @@ maplot_res <- ggmaplot(brain_res,
                        fdr = 0.05, 
                        fc = 2, #log2 of 1 
                        genenames = as.vector(brain_res$row), 
-                       top = 20,  
+                       top = 30,  
                        size = 1,
                        font.main = "bold", 
                        font.label = 8, 
                        label.rectangle=TRUE, 
                        main="MA-Plot Res") + 
   theme_bw() + 
+  ylim(-5,5) +
   theme(panel.grid = element_blank(), 
-        legend.position = c(0.8,0.15), 
+        legend.position = c(0.9,0.8), 
         axis.text=element_text(size=10), 
-        axis.title=element_text(size=10), legend.text = element_text(size = 10))
+        axis.title=element_text(size=10), legend.text = element_text(size = 10)) + 
+annotate(geom = "text", x = 0, y = 3.2, label = "TDP-43 binding in FTLD", color = "black", angle = 90, size=3) +
+  annotate("segment",  y = 1.2, yend = 3, x = 0.3, xend = 0.3, arrow=arrow(length=unit(0.3, "cm"))) + 
+  annotate(geom = "text", x = 0, y = -3.2, label = "TDP-43 binding in FTLD", color = "black", angle = 90, size=3) + 
+  annotate("segment",  y = -1.2, yend = -3, x = 0.3, xend = 0.3, arrow=arrow(length=unit(0.3, "cm")))
 
 maplot_res
 
+res_FC<-brain_res[brain_res$log2FoldChange > 3, ] 
+res_FC<- res_FC[res_FC$baseMean > 4, ]
+ggplot(brain_res) + geom_scattermore(aes(log2(baseMean),log2FoldChange),pointsize=1) + geom_text_repel(data = res_FC, aes(x = log2(baseMean), y = log2FoldChange,label = row), size = 2.4)
+
+
+
+
+
+   # annotate(geom = "text", x = 0, y = 2.9, label = stringr::str_wrap("TDP-43 binding in FTLD", 6), color = "black", angle = 90, size=3.5) + 
 ```
 
 
@@ -947,8 +1048,9 @@ maplot_res
 ```{r}
 
 library(EnhancedVolcano)
-mn_volcano <- EnhancedVolcano(brain_res, lab = (brain_res$row),x = 'log2FoldChange', y = 'pvalue',FCcutoff=1, pCutoff= 10e-4, pointSize = 1,labSize = 4) +
-  theme(legend.position = "none") +ylim(0,5)
+mn_volcano <- EnhancedVolcano(brain_res, lab = (brain_res$row),x = 'log2FoldChange', y = 'pvalue',FCcutoff=1, pCutoff= 10e-4, pointSize = 1,labSize = 3) +
+  theme(legend.position = "none") + xlim(-5,5) + ylim(0,7)
+
 
 mn_volcano 
 ```
@@ -971,11 +1073,311 @@ volcano <- ggplot(data = brain_res, aes(x = log2FoldChange, y = -log10(pvalue), 
   theme_bw() 
 
 volcano 
+
+```
+# RETRIEVE ANNOTATION
+```{r}
+ann<-intresected.chr.df 
+ann_sign<- ann %>% filter(ann$gene_name %in% res_signif$row) %>% filter(sample == "tollervey_brain2" | sample == "tollervey_brain3"  | sample =="tollervey_brain4"| sample == "tollervey_brain5"| sample == "tollervey_brain7.low") %>% group_by(gene_name) %>% arrange(gene_name,desc(score))  %>% dplyr::select(gene_name,region,score,biotype,sample,disease)
+
+ann_sign.tb<-ann_sign %>% group_by(disease,gene_name,score,region) %>% summarise(score=sum(score)) 
+  
+  
+ann_sign.tb.h<-ann_sign.tb[ann_sign.tb$disease =="cognitively normal",] %>% group_by(gene_name,score,region)
+ann_sign.tb.f<-ann_sign.tb[ann_sign.tb$disease =="frontotemporal lobar degeneration",] %>% group_by(gene_name,score,region)
+  
+h<- table(ann_sign.tb.h$gene_name,ann_sign.tb.h$region)
+f<- table(ann_sign.tb.f$gene_name,ann_sign.tb.f$region)
+
+region.healthy<-colnames(h)[apply(h,1,which.max)]
+region.ftld<-colnames(f)[apply(f,1,which.max)]
+
+ann_region<-cbind(h,region.healthy)
+ann_region<-cbind(ann_region,region.ftld) %>% as.data.frame()
+
+
+ann_region$region <- ifelse(region.healthy != region.ftld,paste(region.healthy,region.ftld,sep="-"),paste(region.healthy))
+ann_region<-ann_region %>% select("region")
+
+
+ann_sign.tb<-ann_sign %>% group_by(disease,gene_name,score,biotype) %>% summarise(score=sum(score)) 
+  
+ann_sign.tb.h<-ann_sign.tb[ann_sign.tb$disease =="cognitively normal",] %>% group_by(gene_name,score,biotype)
+ann_sign.tb.f<-ann_sign.tb[ann_sign.tb$disease =="frontotemporal lobar degeneration",] %>% group_by(gene_name,score,biotype)
+  
+h<- table(ann_sign.tb.h$gene_name,ann_sign.tb.h$biotype)
+f<- table(ann_sign.tb.f$gene_name,ann_sign.tb.f$biotype)
+
+biotype.healthy<-colnames(h)[apply(h,1,which.max)]
+biotype.ftld<-colnames(f)[apply(f,1,which.max)]
+
+ann_biotype<-cbind(h,region.healthy)
+ann_biotype<-cbind(ann_biotype,region.ftld) %>% as.data.frame()
+
+ann_biotype$biotype <- ifelse(biotype.healthy != biotype.ftld,paste(biotype.healthy,biotype.ftld,sep="-"),paste(biotype.healthy))
+ann_biotype<-ann_biotype %>% select("biotype")
+
+
+
+ann_df<-cbind(ann_region,ann_biotype)
+ann_df$biotype<-sub("^pre-mRNA","mRNA",ann_df$biotype)
+ann_df$biotype<-sub(",pre-mRNA","",ann_df$biotype)
+ann_df$biotype<-sub("mRNA-mRNA","mRNA",ann_df$biotype)
+ann_df$biotype<-sub("lncRNA-lncRNA","lncRNA",ann_df$biotype)
+ann_df$biotype<-sub("lncRNA-mRNA","mRNA-lncRNA",ann_df$biotype)
+ann_df$region<-sub("UTR3-intron","intron-UTR3",ann_df$region)
+ann_df$region<-sub("CDS-intron","intron-CDS",ann_df$region)
+
+
+```
+
+```{r}
+
+ann_metadata<-rownames_to_column(ann_df,var="gene_name")
+ann_metadata$gene_name<-as.factor(ann_metadata$gene_name)
+
+mn_dge_list_up<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange >= 1) %>% arrange(.,padj) %>% pull(row)
+length(mn_dge_list_up)
+
+mn_dge_list_down<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange <= -1) %>% arrange(.,padj) %>% pull(row)
+length(mn_dge_list_down)
+
+mn_dge_up<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange >= 1) %>% arrange(.,padj) 
+length(mn_dge_up)
+
+mn_dge_down<- filter(brain_res, padj < 0.05) %>% filter(log2FoldChange <= -1) %>% arrange(.,padj) 
+length(mn_dge_down)
+
+
+mn_dge_up$row<-as.factor(mn_dge_up$row)
+mn_dge_up<-left_join(mn_dge_up,ann_metadata, by=c("row"="gene_name"))
+
+mn_dge_down$row<-as.factor(mn_dge_down$row)
+mn_dge_down<-left_join(mn_dge_down,ann_metadata, by=c("row"="gene_name"))
+
+
+write.csv(mn_dge_up, file="ftld_brain_dge_up.csv")
+write.csv(mn_dge_down, file="ftld_brain_dge_down.csv")
+
+write.csv(res_FC, file="ftld_brain_high_fold_change.csv")
+
+
+RNVU1_df<-brain_res[grepl("^RNVU1",brain_res$row),]
+write.csv(RNVU1_df, file="ftld_brain_rnvu1.csv")
+
+
+SNO_df<-brain_res[grepl("^SNO",brain_res$row),]
+write.csv(SNO_df, file="ftld_brain_snora.csv")
 ```
 
 
 
 # HEATMAP OF COUNTS----------------------------------
+
+# Heathmap of 
+
+
+```{r}
+
+### Set a color palette
+heat.colors <- brewer.pal(50, "YlOrRd")
+
+
+#set matrix
+mn_select <- arrange(res_signif, padj) %>% dplyr::select(row)
+mn_select<-mn_select[1:49,]
+mn_mat <- assay(mn_vsd) #vst transformed counts 
+mn_mat <- mn_mat[mn_select,] 
+
+#set annotation for columns
+ann_col <- as.data.frame(colData(dds)[,c("condition")])
+rownames(ann_col) <- colnames(mn_mat)
+colnames(ann_col)<-c("condition")
+#set annotation for rows
+ann_row<-ann_df[mn_select,]
+rownames(ann_row) == rownames(mn_mat)
+
+#set annotation colours
+anno_col = list("condition" = mypal.condition,"region"= mypal.region, "biotype"=mypal.biotype)
+
+unique(ann_col$condition)
+mypal.condition<-c("FTLD" = "#F21905","Healthy" = "#49BF45")
+unique(ann_row$region)
+mypal.region<-c("intron" = "#454241","CDS" ="#F0421C", "intron-CDS" ="#f2617e", "CDS-ncRNA" ="#DDD3D1", "ncRNA" = "#3DB75D", "UTR5" = "#3DB7E6", "UTR3"= "#D644C7","intron-UTR3" = "#fac3f6")
+show_col(mypal.biotype)
+mypal.biotype<-c("lncRNA"="#6FA677","lncRNA,sRNA"= "#00c95e","mRNA-lncRNA"="#89c900","lncRNA,snoRNA" = "#d1e820","mRNA" = "#F54F29","snoRNA"="#f56f2c","snRNA" = "#f24b5c","mt_tRNA" = "#256063")
+
+
+
+mn_countmatrix <- pheatmap(mn_mat,color = heat.colors,border_color=NA,cluster_rows=TRUE, scale="row",show_rownames=F,  annotation_col= ann_col, annotation_row= ann_row,annotation_colors = anno_col,cluster_cols=F, main = paste("Differentially targeted genes: ", "normalised counts"), fontsize = 9)
+mn_countmatrix
+
+```
+
+```{r}
+
+# mn_countmatrix <- pheatmap(mn_mat,color = heat.colors,cluster_rows=TRUE, scale="row",show_rownames=F,cluster_cols=TRUE, main = paste("Top 20 Differentially targeted genes: ", "normalised counts"), fontsize = 10)
+# mn_countmatrix
+
+# mn_countmatrix_top20 <- pheatmap(mn_mat, color = heat.colors,cluster_rows=TRUE, scale="row",show_rownames=TRUE,  annotation_col= ann_col, annotation_row= ann_row,cluster_cols=TRUE, main = paste("Top 20 Differentially targeted genes: ", "normalised counts"), fontsize = 10)
+# mn_countmatrix_top20
+### Run pheatmap fo all significant genes 
+
+mn_select <- arrange(res_signif, padj) %>% dplyr::select(row)
+mn_select<-mn_select[1:20,]
+mn_mat <- assay(mn_vsd)
+mn_mat <- mn_mat[mn_select,] 
+
+#set annotation for columns
+ann_col <- as.data.frame(colData(dds)[,c("condition")])
+rownames(ann_col) <- colnames(mn_mat)
+colnames(ann_col)<-c("condition")
+#set annotation for rows
+ann_row<-ann_df[mn_select,]
+rownames(ann_row) == rownames(mn_mat)
+
+
+mn_countmatrix_top20 <- pheatmap(mn_mat,color = heat.colors,cluster_rows=TRUE, scale="row",show_rownames=T,  annotation_col= ann_col, annotation_row= ann_row,annotation_colors = anno_col,cluster_cols=F, main = paste("Top 20 Differentially targeted genes:", "normalised counts"), fontsize = 9)
+mn_countmatrix_top20 
+
+
+
+
+```
+
+# HEATHMAP ALS GENES AND VCP 
+
+```{r}
+
+als_rbp<-c("hnRNPA2B1","ATXN2","EWSR1","hnRNPA1","MATR3","RGNEF","SFPQ","TAF15","TIA-1","FUS","NONO","PSPC1","TARDBP")
+
+als_rbp_df<- filter(brain_res, row %in% als_rbp)
+
+### Set a color palette
+heat.colors <-rev(brewer.pal(8, "YlOrRd"))
+show_col(heat.colors)
+
+#set matrix
+mn_select <- arrange(als_rbp_df, log2FoldChange) %>% dplyr::select(row)
+mn_select<-mn_select[1:8,]
+mn_mat <- assay(mn_vsd) #vst transformed counts 
+mn_mat <- mn_mat[mn_select,] 
+
+#set annotation for columns
+ann_col <- as.data.frame(colData(dds)[,c("condition")])
+rownames(ann_col) <- colnames(mn_mat)
+colnames(ann_col)<-c("condition")
+
+#set annotation colours
+anno_col = list("condition" = mypal.condition,"region"= mypal.region, "biotype"=mypal.biotype)
+
+
+mn_mat -> matrix_meanSubtract
+symmetric_breaks<-seq(-max(abs(matrix_meanSubtract)),max(abs(matrix_meanSubtract)),
+ length.out=8)
+
+
+mn_countmatrix <- pheatmap(mn_mat,scale="row",color=rev(heat.colors((8))), breaks = symmetric_breaks,cluster_rows=TRUE,show_rownames=T,  annotation_col= ann_col,annotation_colors = anno_col,cluster_cols=F, main = paste("Differentially targeted genes: ", "normalised counts"), fontsize = 9)
+mn_countmatrix
+
+
+```
+
+
+
+```{r}
+
+RNVU1_df<-brain_res[grepl("^RNVU1",brain_res$row),]
+
+### Set a color palette
+heat.colors <-brewer.pal(50, "YlOrRd")
+show_col(heat.colors)
+
+#set matrix
+mn_select <- arrange(RNVU1_df, log2FoldChange) %>% dplyr::select(row)
+mn_select<-mn_select[1:10,]
+mn_mat <- assay(mn_vsd) #vst transformed counts 
+mn_mat <- mn_mat[mn_select,] 
+
+#set annotation for columns
+ann_col <- as.data.frame(colData(dds)[,c("condition")])
+rownames(ann_col) <- colnames(mn_mat)
+colnames(ann_col)<-c("condition")
+
+#set annotation colours
+anno_col = list("condition" = mypal.condition,"region"= mypal.region, "biotype"=mypal.biotype)
+
+
+
+mn_countmatrix <- pheatmap(mn_mat,color = heat.colors,cluster_rows=TRUE, scale="row",show_rownames=T,  annotation_col= ann_col, annotation_row= ann_row,annotation_colors = anno_col,cluster_cols=F, main = paste("Differentially targeted genes: ", "normalised counts"), fontsize = 9)
+mn_countmatrix
+
+
+```
+
+
+```{r}
+SNO_df<-brain_res[grepl("^SNO",brain_res$row),]
+SNO_df<-SNO_df %>% filter(.,log2FoldChange > 0.5 | log2FoldChange < -0.5) %>% filter(., baseMean >4)
+### Set a color palette
+heat.colors <-brewer.pal(39, "YlOrRd")
+show_col(heat.colors)
+
+#set matrix
+mn_select <- arrange(SNO_df, log2FoldChange) %>% dplyr::select(row)
+mn_select<-mn_select[1:26,]
+mn_mat <- assay(mn_vsd) #vst transformed counts 
+mn_mat <- mn_mat[mn_select,] 
+
+#set annotation for columns
+ann_col <- as.data.frame(colData(dds)[,c("condition")])
+rownames(ann_col) <- colnames(mn_mat)
+colnames(ann_col)<-c("condition")
+
+#set annotation colours
+anno_col = list("condition" = mypal.condition,"region"= mypal.region, "biotype"=mypal.biotype)
+
+
+
+mn_countmatrix <- pheatmap(mn_mat,color = heat.colors,cluster_rows=TRUE, scale="row",show_rownames=T,  annotation_col= ann_col, annotation_row= ann_row,annotation_colors = anno_col,cluster_cols=T, main = paste("Differentially targeted genes: ", "normalised counts"), fontsize = 9)
+mn_countmatrix
+
+
+```
+
+```{r}
+snRNA_df<-brain_res[grepl("^snRNA",brain_res$row),]
+SNO_df<-SNO_df %>% filter(.,log2FoldChange > 0.5 | log2FoldChange < -0.5) %>% filter(., baseMean >4)
+### Set a color palette
+heat.colors <-brewer.pal(39, "YlOrRd")
+show_col(heat.colors)
+
+#set matrix
+mn_select <- arrange(SNO_df, log2FoldChange) %>% dplyr::select(row)
+mn_select<-mn_select[1:26,]
+mn_mat <- assay(mn_vsd) #vst transformed counts 
+mn_mat <- mn_mat[mn_select,] 
+
+#set annotation for columns
+ann_col <- as.data.frame(colData(dds)[,c("condition")])
+rownames(ann_col) <- colnames(mn_mat)
+colnames(ann_col)<-c("condition")
+
+#set annotation colours
+anno_col = list("condition" = mypal.condition,"region"= mypal.region, "biotype"=mypal.biotype)
+
+
+
+mn_countmatrix <- pheatmap(mn_mat,color = heat.colors,cluster_rows=TRUE, scale="row",show_rownames=T,  annotation_col= ann_col, annotation_row= ann_row,annotation_colors = anno_col,cluster_cols=T, main = paste("Differentially targeted genes: ", "normalised counts"), fontsize = 9)
+mn_countmatrix
+```
+
+
+
+
+
+
+
 
 #heatmap of transformed/normalized mean counts 
 
@@ -1024,18 +1426,28 @@ mn_gen.clust
 #SIGNIFICANT GENES EXPRESSION HEATHMAP
 #Extract normalized expression for significant genes
 ```{r}
-norm_OEsig <- normalized_counts[sigOE$row,]
+mn_select <- arrange(res_signif, padj) %>% dplyr::select(row)
+mn_select<-mn_select[1:50,]
+mn_mat <- assay(mn_vsd)
+mn_mat <- mn_mat[mn_select,] 
 
 
 ### Set a color palette
 heat.colors <- brewer.pal(6, "YlOrRd")
 
 #set annotation
-df <- as.data.frame(colData(dds)[,c("disease")])
-rownames(df) <- colnames(norm_OEsig)
+ann_col <- as.data.frame(colData(dds)[,c("condition")])
+rownames(ann_col) <- colnames(mn_mat)
+colnames(ann_col)<-c("condition")
+
+ann_row<-as.data.frame(res_signif_ann) %>% column_to_rownames(var="row")
+rownames(ann_row) == rownames(mn_mat)
+
+
+
 ### Run pheatmap
-pheatmap(norm_OEsig, color = heat.colors, cluster_rows = T, show_rownames=F, border_color=NA, fontsize = 10, scale="row",
-         annotation= df, fontsize_row = 10, height=20, main='Significant genes expression heathmap')
+pheatmap(mn_mat, color = heat.colors, cluster_rows = T, show_rownames=F, border_color=NA, fontsize = 10, scale="row",
+         annotation_col= ann_col, annotation_row= ann_row, fontsize_row = 10, height=20, main='Significant genes expression heathmap')
 
 
 #### Top 10 significant DE genes plot 
@@ -1059,6 +1471,115 @@ top20_sigOE_genes%>% select(gene_name,padj,pvalue)
 ```
 
 
+
+## GPROFILER 2
+
+
+
+```{r}
+
+library(gprofiler2) 
+
+#Luisier et al cut-offs: only GO terms containing at least 10 annotated genes considered. Pvalue cut-off: 0.05
+
+#cut-off used in this analysis: padj < 0.05
+#lfc > 0.5
+
+
+# create list of up & downregulated genes
+dge_genes <- filter(brain_res , padj < 0.05 & abs(log2FoldChange) > 1)
+dim(dge_genes) 
+dge_genes <- dge_genes %>% mutate(direction = ifelse(log2FoldChange > 0.5, "upregulated", "downregulated")) %>% 
+  filter(!is.na(direction)) %>% #filter by direction(upregulated/downregulated)
+  split(.$direction) # group into up & downregulated
+# map("ensGsub") use gsub to remove .XX from ensembl gene ID vector 
+
+
+gprofiles <- gost(dge_genes) # run gprofiler2 on all groups - runs on all KEGG, GO, REAC,TF, WP pathways simultaneously
+
+head(gprofiles$result)
+
+#go_manhattan
+go_manhattan <- gostplot(gprofiles, capped = TRUE, interactive = TRUE) # manhattan like plot
+
+go_manhattan
+
+#GO profilers cut offs: 
+  
+#Pvalue cut-off: 0.05
+#retain terms with > 10% of functionally annotated genes that are matched to 
+
+unique(gprofiles$result$source)
+
+
+gprofiles_filt <- gprofiles$result %>%
+  filter(str_detect(source, "KEGG|GO:BP|GO:MF|GO:CC|REAC")) %>% #add react 
+  arrange( -log10(p_value) ) %>% mutate( term_name = as.factor(term_name)) 
+# usually too long and more stringent filtering is needed
+gprofiles_filt <- gprofiles_filt %>% 
+  filter(p_value < 0.05) %>% # retain terms with hypergeometric Padj <0.01#most sign enrich
+  filter(recall > 0.1) #%>% #retain terms with > 10% of functionally annotated genes that are matched to 
+#filter(precision > 0.1) # retain terms with > 10% of genes matched to the whole term
+# aim to keep total term list to < 50 terms. If further filtering needed then make differential testing more stringent to Padj < 0.05 
+paste('"',unique(gprofiles_filt$term_name),'",', sep = "", collapse = '\n') %>% cat() 
+gprofiles_filt$term_name <- strtrim(gprofiles_filt$term_name, 60 ) # limit term_name string length trim the end of long term name 50 char lenght  
+print("create curated profile function")
+curated_profiles <- 
+  function (gprofiles = gprofiles_filt, fill_colour = "Purple"){ 
+    gprofiles %>% 
+      distinct(term_name, .keep_all = TRUE) %>%  arrange( -log10(p_value)) %>% #distinc remove duplicat terms 
+      mutate( term_name = factor(term_name, levels = term_name)) %>% #change character to factor vector in order to order bars in ggplot according to pvalue
+      ggplot( aes( x = term_name, y = -log10(p_value), fill = factor(query) ) ) + 
+      geom_col() + scale_fill_lancet() +
+      facet_grid(query ~ ., space = "free", scales = "free") +
+      coord_flip() + theme_classic() + guides(fill=FALSE) +
+      ylab(label = expression(-log[10]~(P~value)) ) + xlab("") +
+      theme(strip.background = element_blank()) +
+      theme(strip.text.y = element_text(face = "bold",angle = 0)) +
+      theme(axis.text=element_text(size=8)) +
+      #labs(title = unique(group_name) ) +
+      scale_y_continuous(expand = c(0, 0))
+  }
+go_curated <- curated_profiles(gprofiles = gprofiles_filt, fill_colour = "firebrick2") 
+go_curated
+
+```
+
+```{r}
+gprofiles_filt <- gprofiles$result %>%
+  filter(str_detect(source, "KEGG|REAC|CORUM|MIRNA")) %>% #add react 
+  arrange( -log10(p_value) ) %>% mutate( term_name = as.factor(term_name)) 
+# usually too long and more stringent filtering is needed
+gprofiles_filt <- gprofiles_filt %>% 
+  filter(p_value < 0.05) %>% # retain terms with hypergeometric Padj <0.01#most sign enrich
+  filter(recall > 0.1) #%>% #retain terms with > 10% of functionally annotated genes that are matched to 
+#filter(precision > 0.1) # retain terms with > 10% of genes matched to the whole term
+# aim to keep total term list to < 50 terms. If further filtering needed then make differential testing more stringent to Padj < 0.05 
+paste('"',unique(gprofiles_filt$term_name),'",', sep = "", collapse = '\n') %>% cat() 
+gprofiles_filt$term_name <- strtrim(gprofiles_filt$term_name, 60 ) # limit term_name string length trim the end of long term name 50 char lenght  
+print("create curated profile function")
+curated_profiles <- 
+  function (gprofiles = gprofiles_filt, fill_colour = "Purple"){ 
+    gprofiles %>% 
+      distinct(term_name, .keep_all = TRUE) %>%  arrange( -log10(p_value)) %>% #distinc remove duplicat terms 
+      mutate( term_name = factor(term_name, levels = term_name)) %>% #change character to factor vector in order to order bars in ggplot according to pvalue
+      ggplot( aes( x = term_name, y = -log10(p_value), fill = factor(query) ) ) + 
+      geom_col() + scale_fill_lancet() +
+      facet_grid(query ~ ., space = "free", scales = "free") +
+      coord_flip() + theme_classic() + guides(fill=FALSE) +
+      ylab(label = expression(-log[10]~(P~value)) ) + xlab("") +
+      theme(strip.background = element_blank()) +
+      theme(strip.text.y = element_text(face = "bold",angle = 0)) +
+      theme(axis.text=element_text(size=8)) +
+      #labs(title = unique(group_name) ) +
+      scale_y_continuous(expand = c(0, 0))
+  }
+go_curated <- curated_profiles(gprofiles = gprofiles_filt, fill_colour = "firebrick2") 
+go_curated
+
+
+
+```
 
 
 
